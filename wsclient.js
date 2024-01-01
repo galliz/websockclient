@@ -5,11 +5,6 @@
 
 var WSClient = (function (window, document, undefined) {
 
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-
   // MU* protocol carried over the WebSocket API.
   function Connection(url) {
     var that = this;
@@ -52,6 +47,14 @@ var WSClient = (function (window, document, undefined) {
 
   Connection.prototype.reconnect = function () {
     var that = this;
+  
+    if (this.socket) {
+      this.socket.onopen = null;
+      this.socket.onmessage = null;
+      this.socket.onerror = null;
+      this.socket.onclose = null;
+      this.socket.close();
+    }
     
     // quit the old connection, if we have one
     if (this.isConnected()) {
@@ -136,10 +139,6 @@ var WSClient = (function (window, document, undefined) {
   Connection.prototype.onPueblo = null;
   Connection.prototype.onPrompt = null;
 
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
 
   // MU* terminal emulator.
   function Terminal(root) {
@@ -598,6 +597,10 @@ var WSClient = (function (window, document, undefined) {
   };
   
   Terminal.prototype.clear = function() {
+    while (this.root.firstChild) {
+      this.root.removeChild(this.root.firstChild);
+    }
+
     this.root.innerHTML = '';
 
     this.stack = [this.root];
@@ -611,6 +614,13 @@ var WSClient = (function (window, document, undefined) {
     this.ansiClass = '';
     this.ansiState = null;
     this.ansiDirty = false;
+  };
+
+  // Add cleanup method to Terminal
+  Terminal.prototype.cleanup = function() {
+    this.root.innerHTML = '';
+    this.onLine = null;
+    this.onCommand = null;
   };
   
   // animate scrolling the terminal window to the bottom
@@ -643,11 +653,6 @@ var WSClient = (function (window, document, undefined) {
 
 
 
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-
   // User input handler (command history, callback events)
   function UserInput(root) {
     var that = this;
@@ -666,6 +671,16 @@ var WSClient = (function (window, document, undefined) {
     
     this.root.onkeyup = function(evt) {
       UserInput.onkeyup(that, evt);
+    };
+
+    // Cleanup method to remove event listeners
+    this.cleanup = function() {
+      this.root.onkeydown = null;
+      this.root.onkeyup = null;
+      this.onEnter = null;
+      this.onEscape = null;
+      this.keyCycleForward = null;
+      this.keyCycleBackward = null;
     };
   }
   
@@ -806,13 +821,7 @@ var WSClient = (function (window, document, undefined) {
   };
   
   
-  
-
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  // some string helper functions for replacing links and user input tokens
+ // some string helper functions for replacing links and user input tokens
 
   // Example onLine() handler that linkifies URLs in text.
   function LinkHandler(that, lineBuf) {
@@ -1021,12 +1030,6 @@ var WSClient = (function (window, document, undefined) {
   };
 
 
-
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-
   // Module exports.
   var exports = {};
 
@@ -1057,4 +1060,3 @@ var WSClient = (function (window, document, undefined) {
   
   return exports;
 })(window, document);
-
