@@ -1,11 +1,18 @@
 export function Terminal(root) {
-    this.root = root;
+  this.root = root;
 
-    if (root === null) {
-        return null;
-    }
+  if (root === null) {
+    return null;
+  }
 
-    this.clear();
+  this.clear();
+
+  // Set up a simple mutation observer
+  this.observer = new MutationObserver(() => {
+    this.root.scrollTop = this.root.scrollHeight;
+  });
+
+  this.observer.observe(this.root, { childList: true, subtree: true });
 }
 
 Terminal.PARSE_PLAIN = 0;
@@ -485,8 +492,19 @@ Terminal.prototype.clear = function () {
   this.ansiDirty = false;
 };
 
+Terminal.prototype.shouldAutoScroll = function () {
+  return (
+    this.root.scrollTop + this.root.clientHeight >= this.root.scrollHeight - 5
+  );
+};
+
+Terminal.prototype.scrollToBottom = function () {
+  this.root.scrollTop = this.root.scrollHeight;
+};
+
 // Add cleanup method to Terminal
 Terminal.prototype.cleanup = function () {
+  this.observer.disconnect();
   this.root.innerHTML = "";
   this.onLine = null;
   this.onCommand = null;
@@ -494,30 +512,17 @@ Terminal.prototype.cleanup = function () {
 
 // animate scrolling the terminal window to the bottom
 Terminal.prototype.scrollDown = function () {
-  // TODO: May want to animate this, to make it less abrupt.
-  //this.root.scrollTop = this.root.scrollHeight;
-  //return;
-
   var root = this.root;
-  var scrollCount = 0;
-  var scrollDuration = 500.0;
-  var oldTimestamp = performance.now();
+  var shouldScroll =
+    root.scrollTop + root.clientHeight >= root.scrollHeight - 5; // 5px threshold
 
-  function step(newTimestamp) {
-    var bottom = root.scrollHeight - root.clientHeight;
-    var delta = (bottom - root.scrollTop) / 2.0;
-
-    scrollCount += Math.PI / (scrollDuration / (newTimestamp - oldTimestamp));
-    if (scrollCount >= Math.PI) root.scrollTo(0, bottom);
-    if (root.scrollTop === bottom) {
-      return;
-    }
-    root.scrollTo(0, Math.round(root.scrollTop + delta));
-    oldTimestamp = newTimestamp;
-    window.requestAnimationFrame(step);
+  if (shouldScroll) {
+    setTimeout(function () {
+      root.scrollTop = root.scrollHeight;
+    }, 0);
   }
-  window.requestAnimationFrame(step);
 };
 
 // setup the pueblo xch_cmd callback
 Terminal.prototype.onCommand = null;
+
