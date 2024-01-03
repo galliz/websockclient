@@ -907,11 +907,23 @@ function LinkHandler(that, lineBuf) {
 // TODO: Customizers may want to replace this, since regular expressions
 // ultimately limit how clever our heuristics can be.
 LinkHandler.scan = function (line) {
-  var links = [],
-    result;
+  var links = [], result;
 
-  LinkHandler.regex.lastIndex = 0;
-  while ((result = LinkHandler.regex.exec(line))) {
+  // Define the regex inside the scan function
+  // LinkHandler regex:
+  //
+  // 1. Links must be preceded by a non-alphanumeric delimiter.
+  // 2. Links are matched greedily.
+  // 3. URLs must start with a supported scheme.
+  // 4. E-mail addresses are also linkified.
+  // 5. Twitter users and hash tags are also linkified.
+  //
+  // TODO: This can be improved (but also customized). One enhancement might be
+  // to support internationalized syntax.
+  var regex = /(^|[^a-zA-Z0-9]+)(?:((?:http|https):\/\/[-a-zA-Z0-9_.~:\/?#[\]@!$&'()*+,;=%]+[-a-zA-Z0-9_~:\/?#@!$&*+;=%])|([-.+a-zA-Z0-9_]+@[-a-zA-Z0-9]+(?:\.[-a-zA-Z0-9]+)+)|(@[a-zA-Z]\w*))/g;
+
+  regex.lastIndex = 0;
+  while ((result = regex.exec(line))) {
     var info = {};
 
     info.start = result.index + result[1].length;
@@ -936,19 +948,6 @@ LinkHandler.scan = function (line) {
 
   return links;
 };
-
-// LinkHandler regex:
-//
-// 1. Links must be preceded by a non-alphanumeric delimiter.
-// 2. Links are matched greedily.
-// 3. URLs must start with a supported scheme.
-// 4. E-mail addresses are also linkified.
-// 5. Twitter users and hash tags are also linkified.
-//
-// TODO: This can be improved (but also customized). One enhancement might be
-// to support internationalized syntax.
-LinkHandler.regex =
-  /(^|[^a-zA-Z0-9]+)(?:((?:http|https):\/\/[-a-zA-Z0-9_.~:\/?#[\]@!$&'()*+,;=%]+[-a-zA-Z0-9_~:\/?#@!$&*+;=%])|([-.+a-zA-Z0-9_]+@[-a-zA-Z0-9]+(?:\.[-a-zA-Z0-9]+)+)|(@[a-zA-Z]\w*))/g;
 
 // set the default line handler for the terminal to use the LinkHandler
 Terminal.prototype.onLine = LinkHandler;
@@ -1029,7 +1028,6 @@ function ReleaseKey(that, e) {
     that.moveCursor();
   }
 }
-
 
 // Module exports.
 var exports = {};
