@@ -988,38 +988,32 @@ function PressKey(that, e) {
     alt: e.altKey,
   };
 
-  var prevent = true;
-
+  // Handle history cycling
   if (UserInput.isKeyCycleBackward(that, key)) {
-    // cycle history backward
     that.cycleBackward();
+    that.moveCursor();
+    e.preventDefault();
   } else if (UserInput.isKeyCycleForward(that, key)) {
-    // cycle history forward
     that.cycleForward();
-  } else if (key.code === 13) {
-    // enter key
-
-    // save the command string and clear the input box
+    that.moveCursor();
+    e.preventDefault();
+  } else if (key.code === 13) { // Enter key
     var cmd = that.root.value;
     that.saveCommand();
-
-    // pass through to the local callback for sending data
     that.onEnter && that.onEnter(cmd);
-  } else if (key.code === 27) {
-    // pass through to the local callback for the escape key
-    that.onEscape && that.onEscape();
-  } else {
-    // didn't capture anything, pass it through
-    prevent = false;
-  }
-
-  if (prevent) {
     e.preventDefault();
+  } else if (key.code === 27) { // Escape key
+    that.onEscape && that.onEscape();
+    e.preventDefault();
+  } else {
+    // For all other keys, do not prevent default behavior
+    return;
   }
 
-  // make sure input retains focus
+  // Ensure input retains focus
   that.focus();
 }
+
 
 // default handler for key release events
 function ReleaseKey(that, e) {
@@ -1030,14 +1024,12 @@ function ReleaseKey(that, e) {
     alt: e.altKey,
   };
 
-  if (
-    UserInput.isKeyCycleBackward(that, key) ||
-    UserInput.isKeyCycleForward(that, key)
-  ) {
-    // move the cursor to end of the input text after a history change
+  // History cycling does not need additional handling on key release
+  if (UserInput.isKeyCycleBackward(that, key) || UserInput.isKeyCycleForward(that, key)) {
     that.moveCursor();
   }
 }
+
 
 // Module exports.
 var exports = {};
