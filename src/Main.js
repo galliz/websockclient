@@ -156,10 +156,6 @@ Connection.prototype.onPrompt = null;
 function Terminal(root) {
   this.root = root;
 
-  if (root === null) {
-    return null;
-  }
-
   this.clear();
 }
 
@@ -680,31 +676,27 @@ Terminal.prototype.onCommand = null;
 // User input handler (command history, callback events)
 function UserInput(root) {
   var that = this;
-
-  if (root === null) {
-    return null;
-  }
-
+  
   this.root = root;
-
+  
   this.clearHistory();
 
-  this.root.onkeydown = function (evt) {
-    UserInput.onkeydown(that, evt);
+  this.root.onkeydown = function(evt) {
+      UserInput.onkeydown(that, evt);
   };
-
-  this.root.onkeyup = function (evt) {
-    UserInput.onkeyup(that, evt);
+  
+  this.root.onkeyup = function(evt) {
+      UserInput.onkeyup(that, evt);
   };
 
   // Cleanup method to remove event listeners
-  this.cleanup = function () {
-    this.root.onkeydown = null;
-    this.root.onkeyup = null;
-    this.onEnter = null;
-    this.onEscape = null;
-    this.keyCycleForward = null;
-    this.keyCycleBackward = null;
+  this.cleanup = function() {
+      this.root.onkeydown = null;
+      this.root.onkeyup = null;
+      this.onEnter = null;
+      this.onEscape = null;
+      this.keyCycleForward = null;
+      this.keyCycleBackward = null;
   };
 }
 
