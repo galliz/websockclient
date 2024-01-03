@@ -62,6 +62,7 @@ ul {
   overflow-x: hidden;
   white-space: pre-wrap;
   word-wrap: break-word;
+  word-break: break-word; /* Updated this line */
   position: absolute;
   margin: 0;
   border: 0;
@@ -70,6 +71,11 @@ ul {
   width: 99%;
   top: 0;
   bottom: 7em;
+}
+
+#output pre {
+  white-space: pre-wrap; /* Allow text to wrap */
+  word-wrap: break-word; /* Break the word at the end of the line */
 }
 
 #quicklinks {
