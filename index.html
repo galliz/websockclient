@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Minimal Websocket JavaScript Client</title>
-    <link rel="stylesheet" href="css/ansi.css">
-    <link rel="stylesheet" href="css/style.css">
-    <base target="_blank">
-</head>
-<body>
+    <link rel="stylesheet" href="css/ansi.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <base target="_blank" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <div id="terminal">
-        <div id="output" class="ansi-37 ansi-40"></div>
-        <div id="prompt" class="ansi-37 ansi-40"></div>
+      <div id="output" class="ansi-37 ansi-40"></div>
+      <div id="prompt" class="ansi-37 ansi-40"></div>
+      <div class="input-container">
+        <span class="input-prefix">&gt;</span>
         <textarea id="input" autocomplete="off" autofocus></textarea>
+      </div>
     </div>
 
     <script type="module" src="src/Main.js"></script>
     <script type="module" src="src/Initialization.js"></script>
-</body>
+  </body>
 </html>
