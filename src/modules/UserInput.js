@@ -121,10 +121,6 @@ UserInput.prototype.focus = function () {
   }
 };
 
-// user-defined keys for command history
-UserInput.prototype.keyCycleForward = null;
-UserInput.prototype.keyCycleBackward = null;
-
 // default handler for key press events
 export function PressKey(that, e) {
   var key = {
