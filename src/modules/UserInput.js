@@ -165,22 +165,20 @@ export function PressKey(that, e) {
   };
 
   // Handle history cycling
-  if (UserInput.isKeyCycleBackward(that, key)) {
+  if (key.code === 38) { // Up Arrow Key
     that.cycleBackward();
     that.moveCursor();
     e.preventDefault();
-  } else if (UserInput.isKeyCycleForward(that, key)) {
+  } else if (key.code === 40) { // Down Arrow Key
     that.cycleForward();
     that.moveCursor();
     e.preventDefault();
-  } else if (key.code === 13) {
-    // Enter key
+  } else if (key.code === 13) { // Enter key
     var cmd = that.root.value;
     that.saveCommand();
     that.onEnter && that.onEnter(cmd);
     e.preventDefault();
-  } else if (key.code === 27) {
-    // Escape key
+  } else if (key.code === 27) { // Escape key
     that.onEscape && that.onEscape();
     e.preventDefault();
   } else {
