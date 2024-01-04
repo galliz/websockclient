@@ -1,9 +1,7 @@
 // User input handler (command history, callback events)
 export function UserInput(root) {
   var that = this;
-
   this.root = root;
-
   this.clearHistory();
 
   this.root.onkeydown = function (evt) {
@@ -24,9 +22,6 @@ export function UserInput(root) {
     this.keyCycleBackward = null;
   };
 }
-
-// clear the history for a given UserInput object
-UserInput.clearhistory = function (that) {};
 
 // passthrough to the local onKeyDown callback
 UserInput.onkeydown = function (that, evt) {
@@ -97,16 +92,9 @@ UserInput.prototype.cycleForward = function () {
   }
 };
 
-// move the input cursor to the end of the input elements current text
+// move the input cursor to the end of the input element's current text
 UserInput.prototype.moveCursor = function () {
-  if (typeof this.root.selectionStart === "number") {
-    this.root.selectionStart = this.root.selectionEnd = this.root.value.length;
-  } else if (typeof this.root.createTextRange !== "undefined") {
-    this.focus();
-    var range = this.root.createTextRange();
-    range.collapse(false);
-    range.select();
-  }
+  this.root.selectionStart = this.root.selectionEnd = this.root.value.length;
 };
 
 // clear the current input text
@@ -136,24 +124,6 @@ UserInput.prototype.focus = function () {
 // user-defined keys for command history
 UserInput.prototype.keyCycleForward = null;
 UserInput.prototype.keyCycleBackward = null;
-
-UserInput.isKeyCycleForward = function (that, key) {
-  if (that && that.keyCycleForward) {
-    return that.keyCycleForward(key);
-  } else {
-    // default key is ctrl+n
-    return key.code === 78 && key.ctrl;
-  }
-};
-
-UserInput.isKeyCycleBackward = function (that, key) {
-  if (that && that.keyCycleBackward) {
-    return that.keyCycleBackward(key);
-  } else {
-    // default key is ctrl+p
-    return key.code === 80 && key.ctrl;
-  }
-};
 
 // default handler for key press events
 export function PressKey(that, e) {
