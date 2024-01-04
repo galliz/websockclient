@@ -1,28 +1,35 @@
+:root {
+  --terminal-background: black;
+  --input-background: black;
+  --input-color: silver;
+  --input-prefix-color: #3a3a3a;
+  --echo-color: #808000;
+  --log-message-color: #3a3a3a;
+}
+
 html, body {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: rgba(64,64,64,1.0);
-  font-family: 'Ubuntu Mono', monospace; /* Updated font */
-  font-size: 13pt;
-  font-weight: normal;
+  background: rgba(64, 64, 64, 1.0);
+  font-family: 'Ubuntu Mono', monospace;
+  font-size: 14pt;
 }
 
 a {
   display: inline;
   text-decoration: none;
   border-bottom: 1px solid blue;
+  cursor: pointer; /* combined hover effect */
 }
 
-a:hover {
-  cursor: pointer;
-}
-
-textarea {
+textarea, #output, #output pre {
   font-family: inherit;
   font-size: inherit;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 ul {
@@ -34,11 +41,11 @@ ul {
 }
 
 .localEcho {
-  color: #808000;
+  color: var(--echo-color);
 }
 
 .logMessage {
-  color: #3a3a3a;
+  color: var(--log-message-color);
   font-weight: bold;
 }
 
@@ -47,7 +54,7 @@ ul {
   margin: 0;
   padding: 0;
   border: none;
-  background: black;
+  background: var(--terminal-background);
   top: 0;
   right: 0;
   bottom: 0;
@@ -58,59 +65,38 @@ ul {
 #output {
   position: absolute;
   top: 0;
-  bottom: 0;
+  bottom: 4.5em; /* Match the height of the input box */
   left: 0;
   right: 0;
-  padding: 1em; /* Adjust padding as needed */
+  padding: 1em;
   overflow-y: auto; /* Vertical scrollbar */
   overflow-x: hidden; /* Hide horizontal scrollbar */
-  white-space: pre-wrap; /* Wrap text */
-  word-wrap: break-word;
-  font-family: inherit;
-}
-
-#output pre {
-  white-space: pre-wrap; /* Allow text to wrap */
-  word-wrap: break-word; /* Break the word at the end of the line */
-  font-family: inherit;
-}
-
-#quicklinks {
-  display: table-cell;
-  overflow: hidden;
-  position: absolute;
-  left: 0;
-  width: 100%;
-  bottom: 5em;
-  height: 2em;
-  vertical-align: middle;
-  text-align: center;
-}
-
-#prompt {
-  overflow: hidden;
-  white-space: pre-wrap;
-  text-align: left;
-  position: absolute;
-  margin: 0;
-  left: 0;
-  width: 100%;
-  bottom: 4em;
-  height: 1em;
 }
 
 #input {
-  position: absolute;
-  margin: 0;
-  background: black;
-  color: silver;
+  color: var(--input-color);
+  height: 3em;
   border: none;
   outline: none;
-  vertical-align: middle;
-  padding: 1em;
+  flex-grow: 1;
   resize: none;
-  left: 0;
-  width: 99%;
+  padding: 0.5em;
+  overflow: auto; /* Enable scrolling */
+  background: var(--input-background);
+}
+
+.input-container {
+  display: flex;
+  position: absolute;
   bottom: 0;
-  height: 3em;
+  left: 0;
+  right: 0;
+  padding: 0 0.5em 0.5em 0.5em;
+  background: var(--input-background);
+}
+
+.input-prefix {
+  color: var(--input-prefix-color);
+  align-self: top;
+  padding-top: 0.5em;
 }
