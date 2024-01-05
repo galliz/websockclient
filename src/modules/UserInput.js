@@ -176,11 +176,4 @@ export function ReleaseKey(that, e) {
     alt: e.altKey,
   };
 
-  // History cycling does not need additional handling on key release
-  if (
-    UserInput.isKeyCycleBackward(that, key) ||
-    UserInput.isKeyCycleForward(that, key)
-  ) {
-    that.moveCursor();
-  }
 }
