@@ -87,6 +87,7 @@ ul {
 
 .input-container {
   display: flex;
+  align-items: flex-start; /* Align the top of textarea and prefix */
   position: absolute;
   bottom: 0;
   left: 0;
@@ -95,8 +96,10 @@ ul {
   background: var(--input-background);
 }
 
-.input-prefix {
+.input-prefixes {
   color: var(--input-prefix-color);
-  align-self: top;
-  padding-top: 0.5em;
+  padding: 0.5em;
+  text-align: right; /* Align ">" to the right */
+  overflow: hidden; /* Hide overflow */
+  white-space: pre; /* Preserve whitespace */
 }

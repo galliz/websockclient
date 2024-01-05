@@ -1,7 +1,12 @@
-// AutoResizeInput.js
 export function initializeAutoResizeInput() {
   const input = document.getElementById('input');
   const terminal = document.getElementById('terminal');
+  const prefixes = document.querySelector('.input-prefixes');
+
+  const updatePrefixes = () => {
+    const lines = input.value.split('\n').length;
+    prefixes.innerHTML = Array(lines).fill('&gt;').join('<br>');
+  };
 
   const resizeInput = () => {
     // Temporarily disable the scrollbar to prevent flicker
@@ -19,6 +24,8 @@ export function initializeAutoResizeInput() {
     } else {
       input.style.overflow = 'hidden';
     }
+
+    updatePrefixes();
   };
 
   const delayedResize = () => {
@@ -29,7 +36,9 @@ export function initializeAutoResizeInput() {
   input.addEventListener('input', resizeInput); // Handle text changes
   input.addEventListener('keydown', delayedResize); // Handle new lines and other key presses
   input.addEventListener('paste', delayedResize); // Handle pasted multi-line text
+  input.addEventListener('change', updatePrefixes);
 
   // Initial resize for any pre-filled values
   resizeInput();
+  updatePrefixes();
 }
