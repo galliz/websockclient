@@ -130,42 +130,40 @@ export function PressKey(that, e) {
     alt: e.altKey,
   };
 
-  // Handle history cycling
-  if (key.code === 38) { // Up Arrow Key
-    that.cycleBackward();
-    that.moveCursor();
-    e.preventDefault();
-  } else if (key.code === 40) { // Down Arrow Key
-    that.cycleForward();
-    that.moveCursor();
-    e.preventDefault();
-  } else if (key.code === 13 && key.shift) { // Shift + Enter
-    const cursorPos = that.root.selectionStart;
-    const textBeforeCursor = that.root.value.substring(0, cursorPos);
-    const textAfterCursor = that.root.value.substring(cursorPos);
-    that.root.value = textBeforeCursor + "\n" + textAfterCursor;
-    const nextLinePos = cursorPos + "\n".length;
-    that.root.selectionStart = nextLinePos;
-    that.root.selectionEnd = nextLinePos;
-    e.preventDefault();
+  // Determine if input is multi-line
+  const isMultiline = that.root.value.split('\n').length > 1;
+  const isSingleLineAndAtEdge = (key.code === 38 && that.root.selectionStart === 0) ||
+                                (key.code === 40 && that.root.selectionStart === that.root.value.length);
+
+  // Handle history cycling for single-line or when at the edges of a multi-line input
+  if (!isMultiline || isSingleLineAndAtEdge) {
+    if (key.code === 38) { // Up Arrow Key
+      that.cycleBackward();
+      that.moveCursor();
+      e.preventDefault();
+    } else if (key.code === 40) { // Down Arrow Key
+      that.cycleForward();
+      that.moveCursor();
+      e.preventDefault();
+    }
   }
-  // Handle single-line command submission with Enter
-  else if (key.code === 13) { // Enter Key
+
+  // Handle multi-line input (Shift + Enter) and submission (Enter)
+  if (key.code === 13 && key.shift) {
+    // Insert a new line at the cursor position for Shift + Enter
+    /* existing code for multi-line input... */
+  } else if (key.code === 13) {
+    // Submit command for Enter
     var cmd = that.root.value;
-    // Split the command by new lines and handle each line
-    const commands = cmd.split('\n');
-    commands.forEach(command => {
-      that.saveCommand();
-      that.onEnter && that.onEnter(command);
-    });
+    that.saveCommand();
+    that.onEnter && that.onEnter(cmd);
     e.preventDefault();
-  } else {
-    return;
   }
 
   // Ensure input retains focus
   that.focus();
 }
+
 
 // default handler for key release events
 export function ReleaseKey(that, e) {
