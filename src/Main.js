@@ -5,6 +5,7 @@ import { Connection } from './modules/Connection.js';
 import { Terminal } from './modules/Terminal.js';
 import { UserInput, PressKey, ReleaseKey } from './modules/UserInput.js';
 import { LinkHandler, ReplaceToken } from './modules/LinkHandler.js';
+import { initializeAutoResizeInput } from './AutoResizeInput.js';
 
 // set the default line handler for the terminal to use the LinkHandler
 Terminal.prototype.onLine = LinkHandler;
@@ -24,6 +25,9 @@ var WSClient = {
   parseLinks: LinkHandler,
   // Add more methods if there are any
 };
+
+
+initializeAutoResizeInput();
 
 
 // Module exports.
