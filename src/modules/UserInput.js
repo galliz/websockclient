@@ -139,16 +139,27 @@ export function PressKey(that, e) {
     that.cycleForward();
     that.moveCursor();
     e.preventDefault();
-  } else if (key.code === 13) { // Enter key
-    var cmd = that.root.value;
-    that.saveCommand();
-    that.onEnter && that.onEnter(cmd);
+  } else if (key.code === 13 && key.shift) { // Shift + Enter
+    const cursorPos = that.root.selectionStart;
+    const textBeforeCursor = that.root.value.substring(0, cursorPos);
+    const textAfterCursor = that.root.value.substring(cursorPos);
+    that.root.value = textBeforeCursor + "\n" + textAfterCursor;
+    const nextLinePos = cursorPos + "\n".length;
+    that.root.selectionStart = nextLinePos;
+    that.root.selectionEnd = nextLinePos;
     e.preventDefault();
-  } else if (key.code === 27) { // Escape key
-    that.onEscape && that.onEscape();
+  }
+  // Handle single-line command submission with Enter
+  else if (key.code === 13) { // Enter Key
+    var cmd = that.root.value;
+    // Split the command by new lines and handle each line
+    const commands = cmd.split('\n');
+    commands.forEach(command => {
+      that.saveCommand();
+      that.onEnter && that.onEnter(command);
+    });
     e.preventDefault();
   } else {
-    // For all other keys, do not prevent default behavior
     return;
   }
 
