@@ -1,10 +1,11 @@
 :root {
-  --terminal-background: black;
-  --input-background: black;
+  --terminal-background: rgba(0, 0, 0, 0.95);
+  --border-radius: 12px;
   --input-color: silver;
   --input-prefix-color: #3a3a3a;
   --echo-color: #808000;
   --log-message-color: #3a3a3a;
+  --font-size: 14pt;
 }
 
 html, body {
@@ -13,48 +14,18 @@ html, body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: rgba(64, 64, 64, 1.0);
+  background: #161617;
   font-family: 'Ubuntu Mono', monospace;
-  font-size: 14pt;
-}
-
-a {
-  display: inline;
-  text-decoration: none;
-  border-bottom: 1px solid blue;
-  cursor: pointer; /* combined hover effect */
-}
-
-textarea, #output, #output pre {
-  font-family: inherit;
-  font-size: inherit;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
-ul {
-  display: flex;
-  flex-direction: column;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.localEcho {
-  color: var(--echo-color);
-}
-
-.logMessage {
-  color: var(--log-message-color);
-  font-weight: bold;
+  font-size: var(--font-size);
 }
 
 #terminal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   position: absolute;
-  margin: 0;
+  margin: 1em;
   padding: 0;
-  border: none;
-  background: var(--terminal-background);
   top: 0;
   right: 0;
   bottom: 0;
@@ -63,43 +34,65 @@ ul {
 }
 
 #output {
-  position: absolute;
-  top: 0;
-  bottom: 4.5em; /* Match the height of the input box */
-  left: 0;
-  right: 0;
+  flex-grow: 1;
+  margin-bottom: 0.5em; /* Margin between output and input */
   padding: 1em;
-  overflow-y: auto; /* Vertical scrollbar */
-  overflow-x: hidden; /* Hide horizontal scrollbar */
+  background: var(--terminal-background);
+  border-radius: var(--border-radius);
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-size: var(--font-size);
+}
+
+.input-container {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 0.5em;
+  padding: 0.5em;
+  background: var(--terminal-background);
+  border-radius: var(--border-radius);
+  line-height: 1;
 }
 
 #input {
   color: var(--input-color);
   height: 3em;
+  width: 100%;
   border: none;
   outline: none;
-  flex-grow: 1;
   resize: none;
   padding: 0.5em;
-  overflow: auto; /* Enable scrolling */
-  background: var(--input-background);
-}
-
-.input-container {
-  display: flex;
-  align-items: flex-start; /* Align the top of textarea and prefix */
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0 0.5em 0.5em 0.5em;
-  background: var(--input-background);
+  overflow: auto;
+  background: transparent;
+  font-size: var(--font-size);
+  line-height: 1;
 }
 
 .input-prefixes {
   color: var(--input-prefix-color);
   padding: 0.5em;
-  text-align: right; /* Align ">" to the right */
-  overflow: hidden; /* Hide overflow */
-  white-space: pre; /* Preserve whitespace */
+  margin-right: -0.5em;
+  text-align: right;
+  overflow: hidden;
+  white-space: pre;
+  font-size: var(--font-size);
+  line-height: 1;
+}
+
+#output::-webkit-scrollbar {
+  width: 0;
+}
+
+#output:hover::-webkit-scrollbar {
+  width: 12px
+}
+
+#output::-webkit-scrollbar-track {
+  background: rgba(42, 42, 42, 0);
+}
+
+#output:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(102, 102, 102, 0.33);
+  border-radius: 20px;
+  border: 3px solid rgba(42, 42, 42, 0);
 }
