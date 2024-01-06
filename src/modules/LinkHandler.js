@@ -57,14 +57,12 @@ export function LinkHandler(that, lineBuf) {
 
     var middleNode = startNode.splitText(startOff);
     var anchor = document.createElement("a");
-    middleNode.parentNode.replaceChild(anchor, middleNode);
-
     anchor.target = "_blank";
     if (info.url === "" && info.xch_cmd !== "") {
-      anchor.setAttribute("onClick", 'this.onCommand("' + info.xch_cmd + '");');
-      anchor.onCommand = that.onCommand;
+        anchor.onclick = () => that.onCommand(info.xch_cmd);
+        // Removed the setAttribute method and replaced with direct assignment
     } else {
-      anchor.href = info.url;
+        anchor.href = info.url;
     }
     anchor.appendChild(middleNode);
   }

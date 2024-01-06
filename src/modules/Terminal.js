@@ -524,5 +524,8 @@ Terminal.prototype.scrollDown = function () {
 };
 
 // setup the pueblo xch_cmd callback
-Terminal.prototype.onCommand = null;
-
+Terminal.prototype.onCommand = function(command) {
+  // Implement the logic for the command execution
+  console.log("Command clicked:", command);
+  // Add the logic to handle the command here
+};
