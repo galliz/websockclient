@@ -61,14 +61,16 @@ ul {
 
 #output {
   flex-grow: 1;
-  margin-bottom: 0.5em; /* Margin between output and input */
+  margin-bottom: 0.5em;
   padding: 1em;
   background: var(--terminal-background);
   border-radius: var(--border-radius);
   overflow-y: auto;
   overflow-x: hidden;
   font-size: var(--font-size);
-  padding-right: 1em; /* Reserve space for scrollbar */
+  padding-right: 1em;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .input-container {
