@@ -5,6 +5,7 @@
   --input-prefix-color: #3a3a3a;
   --echo-color: #808000;
   --log-message-color: #3a3a3a;
+  --link-color: lime;
   --font-size: 14pt;
 }
 
@@ -17,6 +18,31 @@ html, body {
   background: #161617;
   font-family: 'Ubuntu Mono', monospace;
   font-size: var(--font-size);
+}
+
+a {
+  display: inline;
+  text-decoration: none;
+  /* border-bottom: 1px solid blue; */
+  color: var(--link-color);
+  cursor: pointer; /* combined hover effect */
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.localEcho {
+  color: var(--echo-color);
+}
+
+.logMessage {
+  color: var(--log-message-color);
+  font-weight: bold;
 }
 
 #terminal {
