@@ -1,8 +1,10 @@
-// User input handler (command history, callback events)
+// User input handler (command history, callback events, and autocompletion)
 export function UserInput(root) {
   var that = this;
   this.root = root;
   this.clearHistory();
+  this.autocompleteList = ["@version", "@wait", "@wall", "@wallemit", "@wallpose", "@warnings", "enter", "events", "examine", "follow", "get", "give", "go", "goto", "index", "inventory"];
+  this.autocompleteIndex = -1;
 
   this.root.onkeydown = function (evt) {
     UserInput.onkeydown(that, evt);
@@ -21,6 +23,10 @@ export function UserInput(root) {
     this.keyCycleForward = null;
     this.keyCycleBackward = null;
   };
+
+  this.root.addEventListener('input', function () {
+    that.updateAutocomplete();
+  });
 }
 
 // passthrough to the local onKeyDown callback
@@ -175,3 +181,44 @@ export function ReleaseKey(that, e) {
   };
 
 }
+
+
+// Update the autocomplete suggestions
+UserInput.prototype.updateAutocomplete = function() {
+  const inputVal = this.root.value;
+  // Hide autocomplete when input is empty
+  if (inputVal === '') {
+    this.showAutocomplete('');
+    return;
+  }
+
+  const suggestions = this.autocompleteList.filter(cmd => cmd.startsWith(inputVal) && cmd !== inputVal);
+  this.autocompleteIndex = suggestions.length > 0 ? 0 : -1;
+  this.showAutocomplete(suggestions.length > 0 ? suggestions[0] : '');
+};
+
+// Show autocomplete suggestion
+UserInput.prototype.showAutocomplete = function(suggestion) {
+  const autocompleteDiv = document.getElementById('autocomplete');
+  if (suggestion) {
+    autocompleteDiv.textContent = suggestion;
+    autocompleteDiv.style.display = 'block';
+  } else {
+    autocompleteDiv.style.display = 'none';
+  }
+};
+
+// Handle keydown events for autocompletion
+UserInput.onkeydown = function (that, evt) {
+  // Existing keydown handler code...
+
+  // Add tab key handler for autocompletion
+  if (evt.keyCode === 9) { // Tab key
+    evt.preventDefault();
+    if (that.autocompleteIndex !== -1) {
+      const autocompleteDiv = document.getElementById('autocomplete');
+      that.root.value = autocompleteDiv.textContent;
+      that.updateAutocomplete();
+    }
+  }
+};
