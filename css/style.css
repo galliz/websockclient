@@ -23,9 +23,9 @@ html, body {
 a {
   display: inline;
   text-decoration: none;
-  /* border-bottom: 1px solid blue; */
+  /* border-bottom: 1px solid var(--link-color); */
   color: var(--link-color);
-  cursor: pointer; /* combined hover effect */
+  cursor: pointer;
 }
 
 ul {
@@ -59,35 +59,37 @@ ul {
   overflow: hidden;
 }
 
-#output {
-  flex-grow: 1;
-  margin-bottom: 0.5em;
-  padding: 1em;
-  background: var(--terminal-background);
-  border-radius: var(--border-radius);
-  overflow-y: auto;
-  overflow-x: hidden;
+#output, #input, #output pre, .input-prefixes {
+  font-family: 'Ubuntu Mono', monospace;
   font-size: var(--font-size);
-  padding-right: 1em;
-}
-
-#output, #output pre {
+  line-height: 1;
   white-space: pre-wrap;
   word-break: break-word;
   overflow-wrap: break-word;
 }
 
+#output {
+  background: var(--terminal-background);
+  border-radius: var(--border-radius);
+  flex-grow: 1;
+  margin-bottom: 0.5em;
+  padding: 1em;
+  padding-right: 1em;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .input-container {
+  background: var(--terminal-background);
+  border-radius: var(--border-radius);
   display: flex;
   align-items: flex-start;
   margin-top: 0.5em;
   padding: 0.5em;
-  background: var(--terminal-background);
-  border-radius: var(--border-radius);
-  line-height: 1;
 }
 
 #input {
+  background: transparent;
   color: var(--input-color);
   height: 3em;
   width: 100%;
@@ -96,9 +98,6 @@ ul {
   resize: none;
   padding: 0.5em;
   overflow: auto;
-  background: transparent;
-  font-size: var(--font-size);
-  line-height: 1;
 }
 
 .input-prefixes {
@@ -108,8 +107,6 @@ ul {
   text-align: right;
   overflow: hidden;
   white-space: pre;
-  font-size: var(--font-size);
-  line-height: 1;
 }
 
 #output::-webkit-scrollbar {
