@@ -59,10 +59,10 @@ export function LinkHandler(that, lineBuf) {
     var anchor = document.createElement("a");
     anchor.target = "_blank";
     if (info.url === "" && info.xch_cmd !== "") {
-        anchor.onclick = () => that.onCommand(info.xch_cmd);
-        // Removed the setAttribute method and replaced with direct assignment
+      anchor.onclick = () => that.onCommand(info.xch_cmd);
+      // Removed the setAttribute method and replaced with direct assignment
     } else {
-        anchor.href = info.url;
+      anchor.href = info.url;
     }
     anchor.appendChild(middleNode);
   }
@@ -115,7 +115,6 @@ LinkHandler.scan = function (line) {
 
   return links;
 };
-
 
 // detect if more user input is required for a pueblo command
 export function ReplaceToken(command) {

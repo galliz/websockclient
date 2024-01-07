@@ -1,3 +1,5 @@
+import { WSClient } from "../Main.js";
+
 export function Terminal(root) {
   this.root = root;
 
@@ -524,8 +526,12 @@ Terminal.prototype.scrollDown = function () {
 };
 
 // setup the pueblo xch_cmd callback
-Terminal.prototype.onCommand = function(command) {
-  // Implement the logic for the command execution
-  console.log("Command clicked:", command);
-  // Add the logic to handle the command here
+Terminal.prototype.onCommand = function (command) {
+  if (WSClient.connection && WSClient.connection.isConnected()) {
+    WSClient.connection.sendText(command);
+  } else {
+    console.error("Connection is not established.");
+    // Optionally, try to reconnect
+    WSClient.connection && WSClient.connection.reconnect();
+  }
 };
