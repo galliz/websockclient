@@ -69,8 +69,12 @@ ul {
   overflow-x: hidden;
   font-size: var(--font-size);
   padding-right: 1em;
+}
+
+#output, #output pre {
   white-space: pre-wrap;
-  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .input-container {
